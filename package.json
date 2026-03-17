@@ -1,0 +1,36 @@
+{
+  "name": "agents",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types",
+    "prebuild:scheduler": "turbo run build --filter=@agents/scheduler",
+    "prescheduler": "npm run prebuild:scheduler",
+    "scheduler": "node agents/scheduler/dist/cli.js start",
+    "preagent-list": "npm run prebuild:scheduler",
+    "agent-list": "node agents/scheduler/dist/cli.js list",
+    "preagent-run": "npm run prebuild:scheduler",
+    "agent-run": "node agents/scheduler/dist/cli.js run",
+    "agent-logs": "bash -c 'tail -f \"$(ls -t agents/$0/logs/*.log 2>/dev/null | head -1)\"'",
+    "scheduler:start": "pm2 start ecosystem.config.cjs",
+    "scheduler:stop": "pm2 stop agents-scheduler",
+    "scheduler:restart": "npm run prebuild:scheduler && pm2 restart agents-scheduler",
+    "scheduler:status": "pm2 status agents-scheduler",
+    "scheduler:logs": "pm2 logs agents-scheduler"
+  },
+  "devDependencies": {
+    "prettier": "^3.7.4",
+    "turbo": "^2.8.10",
+    "typescript": "5.9.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "npm@11.9.0",
+  "workspaces": [
+    "agents/*"
+  ]
+}
